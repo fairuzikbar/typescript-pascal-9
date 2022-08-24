@@ -24,6 +24,6 @@ export class Hero {
     }
 
     toString(): string {
-        return `Hero { name: ${this.name}, hp: ${this.hp}, mana: ${this.mana}, baseDamage: ${this.baseDamage}}`
+        return `Hero { name = ${this.name}, hp = ${this.hp}, mana = ${this.mana}, baseDamage = ${this.baseDamage}}`
     }
 }
