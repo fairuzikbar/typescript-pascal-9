@@ -12,6 +12,18 @@ const civic: Vehicle = {
 }
 
 const sedan: Car = new Car(civic);
-console.log(sedan);
-sedan.setFuel(100);
-sedan.startEngine();
+function printCar(): void {
+    const safety: string[] = ['Air Bag', 'Camera', 'Auto Pilot'];
+    const speed = sedan.speed(100);
+    const engineType = sedan.engineType('Matic');
+    const fuelType = sedan.fuelType('Gasoline');
+    const engineSpec = sedan.engineSpec(4000);
+    
+    sedan.safety(safety);
+    console.log(sedan);
+    console.log(speed, '\n', engineType, '\n', fuelType, '\n', engineSpec);
+}
+
+printCar()
+// sedan.setFuel(100);
+// sedan.startEngine();
