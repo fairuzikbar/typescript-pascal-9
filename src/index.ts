@@ -1,46 +1,20 @@
-import Cafe from './Asynchronous/order-coffee'
+import { Kulkas } from './Kulkas/refrigerator-class'
 
-const cafe: Cafe = new Cafe();
+const kulkas: Kulkas = new Kulkas();
 
-const orders: string[] = [
-    'cafe latte',
-    'cappuccino',
-    'kopi susu keluarga',
-    'tea',
-    'black tea',
-    'hazelnut',
-    'ice cream'
-];
-
-// const takeOrder: Promise<string>[] = orders.map((order) => {
-//     return cafe.orderCoffeeWithAsync(order)
-// })
-
-// Promise.all(takeOrder)
-// .then((result: string[]) => {
-//     console.log(result)    
-// })
-// .catch((error) => {
-//     console.error(error);
-// })
-
-async function orderProcess(): Promise<string[]>{
-    const result: string[] = [];
-    for(const order of orders){
-        try {
-            const takeOrder: string = await cafe.orderCoffeeWithAsync(order);
-            result.push(takeOrder);
-        } catch (error) {
-            console.log(`Pesanan ${order} tidak berhasil, karena ${error}`);
-        }
-    }
-    return result;
+async function cekKulkas() {    
+    let action = await kulkas.buka();
+    console.log(await action.lihat().catch(error => error));
+    console.log(`Sedang menyimpan item...`);
+    console.log(await action.simpan('pepaya').catch(error => error));
+    console.log(await action.simpan('mangga').catch(error => error));
+    console.log(await action.simpan('pisang').catch(error => error));
+    console.log(await action.simpan('jambu').catch(error => error));
+    console.log(await action.lihat().catch(error => error));
+    console.log(await action.ambil('manggis').catch(error => error));
+    console.log(await action.ambil('mangga').catch(error => error));
+    console.log(await action.lihat().catch(error => error));    
+    console.log(await kulkas.tutup());
 }
 
-orderProcess()
-.then((result: string[]) => {
-    console.log(result);
-})
-.catch((error) => {
-    console.error(error);
-})
+cekKulkas()
