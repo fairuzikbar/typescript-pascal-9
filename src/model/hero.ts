@@ -11,19 +11,41 @@ export class Hero {
         this.baseDamage = baseDamage
     }
 
-    // getHit(damage: number): void{
-    //     this.hp -= damage
-    // }
+    receiveDamage(hero: Hero): void{
+        this.hp -= hero.getBaseDamage();
+    }
 
-    receiveDamage(damage: number): void{
-        this.hp -= damage;
+    getName(): string{
+        return this.name;
+    }
+
+    getHp(): number{
+        return this.hp;
+    }
+
+    getMana(): number {
+        return this.mana;
     }
 
     attack(hero: Hero): void {
-        hero.receiveDamage(this.baseDamage);
+        hero.receiveDamage(this);
+    }
+
+    heal(hero: Hero): void {
+        hero.hp += this.mana/2;
+        this.mana -= this.mana/2;
+    }
+
+    getBaseDamage(): number {
+        return this.baseDamage;
     }
 
     toString(): string {
-        return `Hero { name = ${this.name}, hp = ${this.hp}, mana = ${this.mana}, baseDamage = ${this.baseDamage}}`
+        return "Hero { " +
+        "name = " + this.name +
+        ", hp = " + this.hp +
+        ", mana = " + this.mana +
+        ", baseDamage = " + this.baseDamage +
+        " }";
     }
 }
