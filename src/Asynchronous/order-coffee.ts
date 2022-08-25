@@ -10,6 +10,19 @@ export default class Cafe {
                 console.log('Pesanan', result, 'sudah selesai');
                 cb(null, result);
             }
-        }, 3000)  
+        }, 3000)
+    }
+
+    private callbackPromise(order: string, resolve: any, reject: any): void {
+        this.orderCoffee(order, (error?: any, result?: string) => {
+            if(error) reject(new Error(error))
+            else resolve(result)
+        })
+    }
+
+    orderCoffeeWithAsync(order: string): Promise<string> {
+        return new Promise<string>((resolve, reject) => {
+            this.callbackPromise(order, resolve, reject)
+        })
     }
 }
