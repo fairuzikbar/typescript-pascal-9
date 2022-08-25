@@ -1,23 +1,43 @@
-import { Hero } from "./model/hero";
+// Generic
+// Kalo menerapkan generic:
+// Flexible untuk menerima jenis tipe data
+// Keyword generic -> T
+// Penggunaan nya bisa di function, class, interface
 
-const daud: Hero = new Hero('Daud', 100, 100, 10);
-const fahlan: Hero = new Hero('Fahlan', 100, 100, 20);
-const riza: Hero = new Hero('Riza', 100, 100, 10);
-const aisyah: Hero = new Hero('Aisyah', 100, 100, 10);
-const rasyid: Hero = new Hero('Rasyid', 100, 100, 40);
+// Before
+function getData(items: any[]): any[] {
+    return [].concat(items);
+}
 
-console.log(fahlan.getName(), 'current hp :', fahlan.getHp());
-console.log(daud.getName(), 'attack', fahlan.getName());
+const people: any[] = getData(['John', 'Alex', 'Kohl']);
+const dice: any[] = getData([1, 2, 3, 4, 5, 6]);
+console.log(people);
+console.log(dice);
 
-daud.attack(fahlan);
 
-console.log(fahlan.getName(), 'current hp :', fahlan.getHp());
+// After Penggunaan Generic
+function getDataOther<T>(items: T[]): T[] {
+    return new Array<T>().concat(items);
+}
 
-console.log(riza.getName(), 'current mana :', riza.getMana());
-console.log(riza.getName(), ' heal', fahlan.getName());
+const people01: Array<string> = getDataOther<string>(['John', 'Alex', 'Kohl']);
+const dice01: Array<number> = getDataOther<number>([1, 2, 3, 4, 5, 6]);
+console.log(people01);
+console.log(dice01);
 
-riza.heal(fahlan);
 
-console.log(riza.getName(), 'current mana :', riza.getMana());
-console.log(fahlan.getName(), 'current hp :', fahlan.getHp());
-console.log(riza.getName(), 'current hp :', riza.getHp());
+// Penggunaan generic pada type alias
+type Employee = {
+    name: string;
+    age: number;
+    skills?: string[];
+}
+
+const employees: Employee[] = getDataOther<Employee>([
+    {name: 'Daud', age: 20, skills: ['Belajar Menghajar']},
+    {name: 'Fahlan', age: 20},
+    {name: 'Riza', age: 20},
+    {name: 'Aisyah', age: 20}
+])
+
+console.log(employees);
