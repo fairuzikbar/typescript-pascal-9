@@ -1,28 +1,55 @@
-// Template Pagination & Single Response
+import Cafe from './Asynchronous/order-coffee'
 
-// Interface ini bisa digunakan sebagai tipe data, bisa juga sebagai property
-interface Paging {
-    page: number;
-    rowsPerPage: number;
-    totalRows: number;
-    totalPages: number;
+const cafe: Cafe = new Cafe();
+
+const takeOrder = (error: any, coffee: string) => {
+    if(error){
+        console.log(error);
+    } else {
+        console.log(coffee);
+    }
 }
 
-interface ResponseEntity<T> {
-    code: number;
-    message: string;
-    data: T
-}
+const orders: string[] = [
+    'cafe latte',
+    'cappuccino',
+    'kopi susu keluarga',
+    'black tea',
+    'hazelnut',
+    'ice cream',
+    'tea'
+];
+cafe.orderCoffee(orders[6], (error: any, coffee: string) => {
+    if(error) console.log(error);
+    else console.log(coffee);    
 
-class SingleResponse<T> implements ResponseEntity<T> {
-    code: number;
-    message: string;
-    data: T
-}
+    cafe.orderCoffee(orders[5], (error: any, coffee: string) => {
+        if(error) console.log(error);
+        else console.log(coffee);
 
-class PagedResponse<T> implements ResponseEntity<T> {
-    code: number;
-    message: string;
-    data: T;
-    paging: Paging
-}
+        cafe.orderCoffee(orders[4], (error: any, coffee: string) => {
+            if(error) console.log(error);
+            else console.log(coffee);
+
+            cafe.orderCoffee(orders[3], (error: any, coffee: string) => {
+                if(error) console.log(error);
+                else console.log(coffee);
+
+                cafe.orderCoffee(orders[2], (error: any, coffee: string) => {
+                    if(error) console.log(error);
+                    else console.log(coffee);
+
+                    cafe.orderCoffee(orders[1], (error: any, coffee: string) => {
+                        if(error) console.log(error);
+                        else console.log(coffee);
+
+                        cafe.orderCoffee(orders[0], (error: any, coffee: string) => {
+                            if(error) console.log(error);
+                            else console.log(coffee);
+                        });
+                    });
+                });
+            });
+        });
+    });
+});
