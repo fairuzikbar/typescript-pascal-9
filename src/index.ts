@@ -1,54 +1,111 @@
-// Observable
-/**
- * - Menyerupai promise
- * - Setiap obervable, hanya bisa dieksekusi/dijalankan ketika ada yang subscribe
- * - Yang menjadi subscribe adalah si observer
- * - Observer ini ada tiga yang bisa digunakan:
- *   - observer.next (berhasil)
- *   - observer.error (ketika ada error/gagal)
- *   - observer.complete (artinya ketika ada lagi observable)
- * contoh: Try Catch Finally
- */
+// Operator yg biasa dipake :
+// Pipe
+// Map
+// SwitchedMap
+// tap
+// retry -> untuk mengulangi langkah
+// delay -> semacam setTimeOut di js
+// distinct -> data yang selanjutnya yg sama tidak akan ditampilkan
 
-import { Observable, Observer } from 'rxjs';
-class PromiseVersusObservable {
-    myObservable: any;
-    myPromise: any;
-    mySubscription: any;
+// Cara biasa
+const array = [1,2,3];
+const multiply = array.map(x => x *x);
 
-    create(): void {
-        this.myObservable = new Observable<string>(observer => {
-            observer.next('Observable has emitted 1.');
-            observer.next('Observable has emitted 2.');
-            // Kalo udah di complete, yg setelah complete ngga akan dieksekusi
-            // tadi mau ditambah, tapi ngga jadi
-            // nambah jadi gini https://rxjs.dev/guide/observer
-            observer.complete();
-            observer.next('Observable has emitted 3.');
-        })
+console.log(multiply);
 
-        this.myPromise = new Promise<string>(resolve => {
-            resolve('Promise has emitted.');
-        })
 
-        // Observable layaknya synchronous, dia akan dipanggil duluan ketika ada promise yang bersamanya
-        // Bagaimana jika ingin tampil setelah promise?
-        // Caranya dengan menerapkan setTimeOut
-        setTimeout(() => {
-            this.mySubscription = this.myObservable.subscribe((data:any) => {
-                console.log(data);  
-            })
-        }, 0)
-    
-        this.myPromise.then((data:any) => {
-            console.log(data);  
-        })
-    }
+// Menggunakan observer
+import { of, map, observable, tap, switchMap, catchError } from 'rxjs';
 
-    cancel(): void {
-        this.mySubscription.unsubscribe();
-    }
-}
+of(1, 2, 3)
+    .pipe(map((x) => x * x))
+    .subscribe((v) => console.log(`value: ${v}`));
 
-const promiseObservable: PromiseVersusObservable = new PromiseVersusObservable();
-promiseObservable.create()
+
+// Kulakas use observable
+import { Kulkas } from './observable/kulkas-class'
+
+// const kulkas: Kulkas = new Kulkas();
+
+// function cekKulkas() {    
+//     kulkas.buka();
+//     kulkas.aksi.lihat().subscribe((data) => console.log(data));
+//     console.log(`Sedang menyimpan item...`);
+//     kulkas.aksi.simpan('pepaya').subscribe(data => console.log(data));
+//     kulkas.aksi.simpan('mangga').subscribe(data => console.log(data));
+//     kulkas.aksi.simpan('pisang').subscribe(data => console.log(data));
+//     kulkas.aksi.simpan('jambu').subscribe(data => console.log(data));
+//     kulkas.aksi.lihat().subscribe(data => console.log(data)) ;
+//     kulkas.aksi.ambil('manggis').subscribe((data) => console.log(data));
+//     kulkas.aksi.ambil('mangga').subscribe((data) => console.log(data));
+//     kulkas.aksi.lihat().subscribe((data) => console.log(data));
+//     console.log(kulkas.tutup());
+// }
+
+// cekKulkas()
+
+// cara 2
+const kulkas: Kulkas = new Kulkas();
+const action = kulkas.buka();
+action.pipe(
+    tap((data) => console.log(data)),
+    switchMap(() => {
+        return kulkas.aksi.lihat();
+    }),
+    catchError((error) => {
+        return of('Ada Error')
+    }),
+    tap((data) => console.log(data)),
+    switchMap(() => {
+        return kulkas.aksi.simpan('Pepaya');
+    }),
+    catchError((error) => {
+        return of('Ada Error')
+    }),
+    tap((data) => console.log(data)),
+    switchMap(() => {
+        return kulkas.aksi.lihat();
+    }),
+    catchError((error) => {
+        return of('Ada Error')
+    }),
+    tap((data) => console.log(data)),
+    switchMap(() => {
+        return kulkas.aksi.simpan('Mangga');
+    }),
+    catchError((error) => {
+        return of('Ada Error')
+    }),
+    tap((data) => console.log(data)),
+    switchMap(() => {
+        return kulkas.aksi.ambil('Manggis');
+    }),
+    catchError((error) => {
+        return of('Ada Error')
+    }),
+    tap((data) => console.log(data)),
+    switchMap(() => {
+        return kulkas.aksi.ambil('Pepaya');
+    }),
+    catchError((error) => {
+        return of('Ada Error')
+    }),
+    tap((data) => console.log(data)),
+    switchMap(() => {
+        return kulkas.aksi.lihat();
+    }),
+    catchError((error) => {
+        return of('Ada Error')
+    }),
+    tap((data) => console.log(data)),
+    switchMap(() => {
+        return kulkas.tutup();
+    }),
+    catchError((error) => {
+        return of('Ada Error')
+    })
+).subscribe({
+    next: data => console.log(data),
+    error: error => console.log(error),
+    complete: () => console.log('Program selesai')
+})
