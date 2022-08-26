@@ -10,7 +10,7 @@
  * contoh: Try Catch Finally
  */
 
-import { Observable } from 'rxjs';
+import { Observable, Observer } from 'rxjs';
 class PromiseVersusObservable {
     myObservable: any;
     myPromise: any;
@@ -18,7 +18,13 @@ class PromiseVersusObservable {
 
     create(): void {
         this.myObservable = new Observable<string>(observer => {
-            observer.next('Observable has emitted.');
+            observer.next('Observable has emitted 1.');
+            observer.next('Observable has emitted 2.');
+            // Kalo udah di complete, yg setelah complete ngga akan dieksekusi
+            // tadi mau ditambah, tapi ngga jadi
+            // nambah jadi gini https://rxjs.dev/guide/observer
+            observer.complete();
+            observer.next('Observable has emitted 3.');
         })
 
         this.myPromise = new Promise<string>(resolve => {
